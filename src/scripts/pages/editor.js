@@ -6,9 +6,6 @@ import { getPhotostripsForLayout } from '../features/photostrips.js'
 import { StickerManager } from '../features/stickerInteraction.js'
 
 export async function initEditor() {
-    /* ========================
-       SETUP & STATE
-    ======================== */
     const params = new URLSearchParams(window.location.search)
     const layoutId = params.get('layout')
     let layout = getLayoutById(layoutId)
@@ -31,9 +28,6 @@ export async function initEditor() {
         bgColor: '#ffffff'
     }
 
-    /* ========================
-       DOM ELEMENTS
-    ======================== */
     const captureView = document.querySelector('#capture-view')
     const customizeView = document.querySelector('#customize-view')
     const videoElement = document.querySelector('#camera-feed')
@@ -54,9 +48,6 @@ export async function initEditor() {
     const toggleText = document.querySelector('#toggle-text')
     const toggleDate = document.querySelector('#toggle-date')
 
-    /* ========================
-       CANVAS SETUP
-    ======================== */
     finalCanvas.width = layout.width
     finalCanvas.height = layout.height
     livePreviewCanvas.width = layout.width
@@ -64,9 +55,6 @@ export async function initEditor() {
 
     statusText.textContent = `Pose 1 of ${layout.photoCount}`
 
-    /* ========================
-       CAMERA START
-    ======================== */
     const hasCamera = await startCamera(videoElement)
     if (!hasCamera) {
         statusText.textContent = 'Camera unavailable'
@@ -75,9 +63,6 @@ export async function initEditor() {
 
     renderLivePreview()
 
-    /* ========================
-       CORE CAPTURE FLOW
-    ======================== */
     captureBtn.addEventListener('click', async () => {
         if (isCapturing || photos.length >= layout.photoCount) return
 
@@ -105,9 +90,6 @@ export async function initEditor() {
         finishCapture()
     })
 
-    /* ========================
-       UPLOAD SUPPORT
-    ======================== */
     uploadBtn.addEventListener('click', () => fileInput.click())
 
     fileInput.addEventListener('change', e => {
@@ -131,18 +113,12 @@ export async function initEditor() {
         reader.readAsDataURL(file)
     })
 
-    /* ========================
-       RETAKE
-    ======================== */
     retakeBtn.addEventListener('click', async () => {
         photos.length = 0
         statusText.textContent = `Pose 1 of ${layout.photoCount}`
         await renderLivePreview()
     })
 
-    /* ========================
-       FINISH CAPTURE
-    ======================== */
     function finishCapture() {
         stopCamera(videoElement)
         captureView.classList.add('hidden')
@@ -150,9 +126,6 @@ export async function initEditor() {
         initCustomization()
     }
 
-    /* ========================
-       CUSTOMIZATION
-    ======================== */
     function initCustomization() {
         stickerManager = new StickerManager(finalCanvas, updateFinalCanvas)
         renderFramesSidebar()
@@ -160,28 +133,35 @@ export async function initEditor() {
         customizeSection.style.display = 'block'
         bgColorPicker.value = currentOptions.bgColor
         toggleDate.checked = currentOptions.showDate
-        updateBrandingToggleState()
+        updateCustomizationState()
         updateFinalCanvas()
     }
 
-    function updateBrandingToggleState() {
-        const brandingLabel = toggleText.closest('.toggle-customize')
-
-        if (layout.image || !layout.text) {
-            brandingLabel.style.display = 'none'
+    function updateCustomizationState() {
+        if (layout.image) {
+            customizeSection.style.display = 'none'
             currentOptions.showBranding = false
-        } else if (layout.lockBranding) {
-            brandingLabel.style.display = 'none'
-            currentOptions.showBranding = true
+            currentOptions.showDate = false
         } else {
-            brandingLabel.style.display = 'flex'
-            toggleText.checked = currentOptions.showBranding
+            customizeSection.style.display = 'block'
+            const brandingLabel = toggleText.closest('.toggle-customize')
+
+            if (!layout.text) {
+                brandingLabel.style.display = 'none'
+                currentOptions.showBranding = false
+            } else if (layout.lockBranding) {
+                brandingLabel.style.display = 'none'
+                currentOptions.showBranding = true
+            } else {
+                brandingLabel.style.display = 'flex'
+                toggleText.checked = currentOptions.showBranding
+            }
         }
+
+        toggleText.checked = currentOptions.showBranding
+        toggleDate.checked = currentOptions.showDate
     }
 
-    /* ========================
-       RENDERING
-    ======================== */
     async function renderLivePreview() {
         const dataUrl = await renderLayout(layout, photos, null, {
             showText: true,
@@ -211,9 +191,6 @@ export async function initEditor() {
         img.src = dataUrl
     }
 
-    /* ========================
-       FRAMES
-    ======================== */
     async function renderFramesSidebar() {
         framesList.innerHTML = ''
         const strips = getPhotostripsForLayout(layout.id)
@@ -234,13 +211,10 @@ export async function initEditor() {
 
         layout.image = strip.stripImage
         layout.slots = strip.slots || getLayoutById(layout.id).slots
-        updateBrandingToggleState()
+        updateCustomizationState()
         updateFinalCanvas()
     }
 
-    /* ========================
-       STICKERS
-    ======================== */
     function renderStickersSidebar() {
         stickersList.innerHTML = ''
         STICKERS.forEach(sticker => {
@@ -250,9 +224,6 @@ export async function initEditor() {
         })
     }
 
-    /* ========================
-       CONTROLS
-    ======================== */
     bgColorPicker.oninput = e => {
         currentOptions.bgColor = e.target.value
         updateFinalCanvas()
@@ -280,9 +251,6 @@ export async function initEditor() {
         if (confirm('Start Over?')) location.reload()
     }
 
-    /* ========================
-       HELPERS
-    ======================== */
     function runCountdown(seconds) {
         return new Promise(resolve => {
             const overlay = document.querySelector('#countdown-overlay')
