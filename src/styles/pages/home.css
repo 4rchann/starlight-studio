@@ -9,7 +9,7 @@ body {
     padding: 0;
     width: 100%;
     max-width: var(--container-max-width);
-    min-height: 800px;
+    height: 800px;
     border-radius: var(--radius-2xl);
     background: radial-gradient(circle at center, var(--color-primary-light), #ebdce4);
     background-size: 200% 200%;
