@@ -1,20 +1,20 @@
 export const STICKERS = [
     {
-        id: 'sticker-star',
-        name: 'Star',
-        src: './assets/stickers/star3.png',
-        defaultSize: 150
-    },
-    {
         id: 'sticker-ribbon',
         name: 'Ribbon',
-        src: './assets/stickers/ribbon-icon.png',
+        src: './assets/stickers/ribbon.png',
         defaultSize: 150
     },
     {
-        id: 'sticker-hutaoghost',
-        name: 'Hutao Ghost',
-        src: './assets/stickers/hutao-ghost.png',
+        id: 'sticker-bubbleBekberner',
+        name: 'Bekberner',
+        src: './assets/stickers/bekberner.png',
+        defaultSize: 150
+    },
+    {
+        id: 'sticker-bubbleWhenYh',
+        name: 'When Yh',
+        src: './assets/stickers/whenYh.png',
         defaultSize: 150
     },
 ]
