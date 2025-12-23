@@ -3,7 +3,7 @@ export function initBgAnimation() {
     if(!pageContent) return
     
     const iconCount = 23
-    const assetsBase = '../../../assets/images'
+    const assetsBase = './assets/images'
     const iconSources = [
         `${assetsBase}/boba-icon.png`,
         `${assetsBase}/star1.png`,
