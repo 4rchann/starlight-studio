@@ -17,4 +17,10 @@ export const STICKERS = [
         src: './assets/stickers/whenYh.png',
         defaultSize: 150
     },
+    {
+        id: 'sticker-bubbletooCuteForYou',
+        name: 'Too Cute For You',
+        src: './assets/stickers/tooCuteForYou.png',
+        defaultSize: 150
+    }
 ]
