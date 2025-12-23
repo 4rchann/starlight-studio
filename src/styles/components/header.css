@@ -1,0 +1,118 @@
+.header-container {
+    width: 100%;
+}
+
+.top-header {
+    padding: var(--spacing-sm) 0;
+}
+
+.top-menu {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.social {
+    margin: auto 0;
+    
+    & ul {
+        display: flex;
+        padding: 0;
+        margin: 0;
+
+        & li {
+            margin-left: var(--spacing-lg);
+            list-style: none;
+        }
+    }
+
+    & iconify-icon {
+        color: var(--color-text);
+        transition: color var(--transition-base);
+
+        &:hover {
+            color: var(--color-primary);
+        }
+    }
+}
+
+.logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: var(--spacing-lg) 0 0 0;
+
+    & img {
+        max-width: 125px;
+        height: auto;
+    }
+
+    & .logo-text {
+        font-family: var(--font-display);
+        font-size: var(--font-size-4xl);
+        margin-left: var(--spacing-sm);
+    }
+}
+
+.bottom-header {
+    padding: var(--spacing-xs) 0 0 0;
+}
+
+.menu {
+    display: flex;
+    justify-content: center;
+    margin-top: 0;
+    font-size: var(--font-size-lg);
+
+    & ul {
+        display: flex;
+        list-style-type: none;
+        gap: 140px;
+        border-radius: var(--radius-2xl);
+        padding: var(--spacing-sm);
+        position: relative;
+
+        & a {
+            position: relative;
+            display: inline-block;
+            text-decoration: none;
+            color: var(--color-text);
+            align-items: center;
+            gap: 6px;
+            transition: color var(--spacing-xs) 7px;
+
+            &:hover {
+                color: var(--color-primary);
+            }
+
+            &.active {
+                color: var(--color-primary);
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .top-header, .top-menu, .social ul li a {
+        display: flex;
+        justify-content: center;
+        max-width: 100%;
+    }
+
+    .logo img {
+        max-width: 85px;
+    }
+
+    .logo-text {
+        font-size: var(--font-size-xl);
+    }
+
+    .menu {
+        font-size: var(--font-size-sm);
+    }
+
+    .menu ul {
+        gap: var(--spacing-md);
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}

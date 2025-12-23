@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Starlight Studio is a virtual photobooth to create custom photostrips online. Upload photos, choose layouts, add stickers and captions, and download print-ready results instantly.">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Starlight Studio | Camera">
+    <meta property="og:description" content="Starlight Studio is a virtual photobooth to create custom photostrips online. Upload photos, choose layouts, add stickers and captions, and download print-ready results instantly.">
+    <meta name="theme-color" content="#f586b4">
+    <title>Starlight Studio | Camera</title>
+    <link rel="icon" href="./assets/images/camera-icon-head.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Norican&family=Sriracha&family=Story+Script&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./src/styles/styles.css">
+    <link rel="stylesheet" href="./src/styles/pages/editor.css">
+</head>
+<body data-page="editor">
+    <div class="editor-container">
+        <header class="editor-header">
+            <a href="layouts-picker.html" class="back-link">
+                <iconify-icon icon="ph:arrow-left-bold"></iconify-icon>
+            </a>
+            <div class="brand">
+                <img src="./assets/images/camera-icon.png" alt="Starlight Studio" class="logo">
+                <span class="brand-name">Starlight Studio</span>
+            </div>
+            <div class="actions">
+
+            </div>
+        </header>
+
+        <main id="capture-view" class="view-section">
+            <div class="capture-layout">
+                <div class="camera-column">
+                    <div class="camera-wrapper">
+                        <video id="camera-feed" autoplay playsinline muted></video>
+                        <div id="countdown-overlay" class="countdown hidden">3</div>
+                        <div id="flash-overlay" class="flash"></div>
+                    </div>
+                    <div class="controls-area">
+                        <div class="status-text">Ready to Capture</div>
+                        <div class="shutter-row">
+                            <button id="retake-btn" class="control-btn secondary" hidden>
+                                <iconify-icon icon="ph:arrow-counter-clockwise-bold"></iconify-icon>
+                            </button>
+                            <button id="capture-btn" class="shutter-btn">
+                                <div class="shutter-inner">
+                                    <iconify-icon icon="ph:camera-fill"></iconify-icon>
+                                </div>
+                            </button>
+                            <input type="file" id="file-upload" accept="image/*" hidden>
+                            <button id="upload-btn" class="control-btn secondary">
+                                <iconify-icon icon="ph:image-bold"></iconify-icon>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="preview-column">
+                    <h3>Preview</h3>
+                    <div class="live-preview-container">
+                        <canvas id="live-preview-canvas"></canvas>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <main id="customize-view" class="view-section hidden">
+            <div class="customize-layout">
+                <aside class="sidebar left-sidebar">
+                    <div class="sidebar-header">
+                        <iconify-icon icon="ph:image-square-fill"></iconify-icon>
+                        <span>Photostrips</span>
+                    </div>
+                    <div id="frames-list" class="sidebar-grid-2">
+
+                    </div>
+                </aside>
+                <div class="center-canvas-area">
+                    <div class="final-canvas-wrapper">
+                        <canvas id="final-canvas"></canvas>
+                    </div>
+                    <div class="center-controls">
+                        <button id="download-btn" class="btn primary-btn">
+                            Download Photo
+                            <iconify-icon icon="ph:download-bold"></iconify-icon>
+                        </button>
+                        <button id="restart-btn" class="btn text-btn">Retake</button>
+                    </div>
+                </div>
+                <aside class="sidebar right-sidebar">
+                    <div class="sidebar-section">
+                        <div class="sidebar-header">
+                            <iconify-icon icon="ph:sticker-fill"></iconify-icon>
+                            <span>Stickers</span>
+                        </div>
+                        <div id="stickers-list" class="sidebar-grid">
+
+                        </div>
+                    </div>
+                    <div id="customize-sidebar-section" class="sidebar-section">
+                        <div class="sidebar-header">
+                            <iconify-icon icon="ph:sliders-horizontal-fill"></iconify-icon>
+                            <span>Customize</span>
+                        </div>
+                        <div class="customize-list">
+                            <label class="toggle-customize">
+                                <span>Background Color</span>
+                                <input type="color" id="bg-color-picker" value="#ffffff">
+                            </label>
+                            <label class="toggle-customize">
+                                <input type="checkbox" id="toggle-text" checked>
+                                <span>Show Starlight Studio</span>
+                            </label>
+                            <label class="toggle-customize">
+                                <input type="checkbox" id="toggle-date">
+                                <span>Show Date</span>
+                            </label>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </main>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/iconify-icon@3.0.0/dist/iconify-icon.min.js"></script>
+    <script type="module" src="./src/scripts/main.js"></script>
+</body>
+</html>
