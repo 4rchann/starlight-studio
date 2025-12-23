@@ -25,8 +25,6 @@ The project is designed to feel like a real photobooth experience, with automati
 - HTML
 - CSS
 - Vanilla JavaScript
-- Canvas API
-- MediaDevices Camera API
 
 No backend is required. All processing happens on the client side.
 
