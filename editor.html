@@ -105,18 +105,66 @@
                             <span>Customize</span>
                         </div>
                         <div class="customize-list">
-                            <label class="toggle-customize">
-                                <span>Background Color</span>
-                                <input type="color" id="bg-color-picker" value="#ffffff">
-                            </label>
-                            <label class="toggle-customize">
-                                <input type="checkbox" id="toggle-text" checked>
-                                <span>Show Starlight Studio</span>
-                            </label>
+                            <div class="color-picker-wrapper">
+                                <span class="color-picker-label">Background Color</span>
+                                <div class="color-picker-container">
+                                    <button type="button" class="color-swatch" id="color-swatch" aria-label="Pick background color">
+                                        <span class="swatch-inner"></span>
+                                    </button>
+                                    <div class="color-picker-dropdown" id="color-picker-dropdown">
+                                        <div class="color-picker-presets">
+                                            <button type="button" class="preset-color" data-color="#ffffff" style="background: #ffffff;" aria-label="White"></button>
+                                            <button type="button" class="preset-color" data-color="#fce4ec" style="background: #fce4ec;" aria-label="Pastel Pink"></button>
+                                        </div>
+                                        <div class="color-picker-gradient-area">
+                                            <canvas id="color-gradient-canvas" width="200" height="150"></canvas>
+                                            <div class="gradient-cursor" id="gradient-cursor"></div>
+                                        </div>
+                                        <div class="color-picker-hue-area">
+                                            <input type="range" id="hue-slider" min="0" max="360" value="0" class="hue-slider">
+                                        </div>
+                                        <div class="color-picker-input-area">
+                                            <span class="hex-label">HEX</span>
+                                            <input type="text" id="hex-input" class="hex-input" value="#ffffff" maxlength="7">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="customize-divider"></div>
+                            
                             <label class="toggle-customize">
                                 <input type="checkbox" id="toggle-date">
                                 <span>Show Date</span>
                             </label>
+                            
+                            <label class="toggle-customize">
+                                <input type="checkbox" id="toggle-location">
+                                <span>Show Location</span>
+                            </label>
+                            
+                            <div class="location-input-wrapper" id="location-input-wrapper">
+                                <input type="text" id="location-input" class="text-input-field" placeholder="Jakarta, Indonesia" maxlength="50">
+                                <button type="button" class="location-detect-btn" id="location-detect-btn" aria-label="Detect location">
+                                    <iconify-icon icon="ph:crosshair-simple"></iconify-icon>
+                                </button>
+                            </div>
+                            
+                            <div class="customize-divider"></div>
+                            
+                            <label class="toggle-customize">
+                                <input type="checkbox" id="toggle-caption">
+                                <span>Show Caption</span>
+                            </label>
+                            
+                            <div class="caption-input-wrapper" id="caption-input-wrapper">
+                                <input type="text" id="caption-input" class="text-input-field" placeholder="i like this version of me" maxlength="70">
+                                <div class="caption-style-selector">
+                                    <button type="button" class="caption-style-btn active" data-style="quoted" aria-label="Quoted style">" "</button>
+                                    <button type="button" class="caption-style-btn" data-style="dashed" aria-label="Dashed style">— —</button>
+                                    <button type="button" class="caption-style-btn" data-style="questioning" aria-label="Questioning style">— ?</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </aside>

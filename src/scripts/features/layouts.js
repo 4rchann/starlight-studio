@@ -11,7 +11,8 @@ export const LAYOUTS = [
             { x: 50, y: 50, width: 500, height: 750 },
             { x: 50, y: 850, width: 500, height: 750}
         ],
-        text: { x: 300, y: 1700, fontSize: 32, color: '#000000', text: 'Starlight Studio'}
+        text: { x: 300, y: 1650, fontSize: 32, color: '#000000', text: 'Starlight Studio'},
+        archiveLabel: { x: 575, y: 26, fontSize: 18, text: '— starlight archive —', align: 'right' }
     },
     {
         id: 'layout-6x2-4',
@@ -27,7 +28,8 @@ export const LAYOUTS = [
             { x: 50, y: 850, width: 500, height: 375},
             { x: 50, y: 1250, width: 500, height: 375}
         ],
-        text: { x: 300, y: 1700, fontSize: 32, color: '#000000', text: 'Starlight Studio'}
+        text: { x: 300, y: 1680, fontSize: 32, color: '#000000', text: 'Starlight Studio'},
+        archiveLabel: { x: 575, y: 14, fontSize: 18, text: '— starlight archive —', align: 'right' }
     },
     {
         id: 'layout-6x4-1',
@@ -41,6 +43,7 @@ export const LAYOUTS = [
             { x: 100, y: 100, width: 1000, height: 1400}
         ],
         text: { x: 600, y: 1600, fontSize: 40, color: '#000000', text: 'Starlight Studio'},
+        archiveLabel: { x: 1175, y: 52, fontSize: 24, text: '— starlight archive —', align: 'right' },
         lockBranding: true
     },
     {
@@ -55,7 +58,8 @@ export const LAYOUTS = [
             { x: 100, y: 100, width: 1000, height: 700},
             { x: 100, y: 850, width: 1000, height: 700}
         ],
-        text: { x: 600, y: 1600, fontSize: 40, color: '#000000', text: 'Starlight Studio'},
+        text: { x: 600, y: 1630, fontSize: 40, color: '#000000', text: 'Starlight Studio'},
+        archiveLabel: { x: 1175, y: 42, fontSize: 24, text: '— starlight archive —', align: 'right' },
         lockBranding: true
     },
     {
@@ -73,6 +77,7 @@ export const LAYOUTS = [
             { x: 625, y: 800, width: 525, height: 700}
         ],
         text: { x: 600, y: 1600, fontSize: 40, color: '#000000', text: 'Starlight Studio'},
+        archiveLabel: { x: 1175, y: 34, fontSize: 24, text: '— starlight archive —', align: 'right' },
         lockBranding: true
     },
     {
@@ -92,6 +97,7 @@ export const LAYOUTS = [
             { x: 650, y: 1050, width: 500, height: 450}
         ],
         text: { x: 600, y: 1600, fontSize: 40, color: '#000000', text: 'Starlight Studio'},
+        archiveLabel: { x: 1175, y: 34, fontSize: 24, text: '— starlight archive —', align: 'right' },
         lockBranding: true
     }
 ]

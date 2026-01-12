@@ -4,6 +4,7 @@ import { renderLayout } from '../features/canvasRenderer.js'
 import { STICKERS } from '../features/stickers.js'
 import { getPhotostripsForLayout } from '../features/photostrips.js'
 import { StickerManager } from '../features/stickerInteraction.js'
+import { requestGeolocation, extractExifLocation, getLocationString } from '../features/locationService.js'
 
 export async function initEditor() {
     const params = new URLSearchParams(window.location.search)
@@ -21,10 +22,16 @@ export async function initEditor() {
     const photos = []
     let isCapturing = false
     let stickerManager = null
+    let captureMode = 'camera'
 
     const currentOptions = {
         showBranding: true,
-        showDate: true,
+        showDate: false,
+        showLocation: false,
+        showCaption: false,
+        locationText: '',
+        captionText: '',
+        captionStyle: 'quoted',
         bgColor: '#ffffff'
     }
 
@@ -44,9 +51,23 @@ export async function initEditor() {
     const downloadBtn = document.querySelector('#download-btn')
     const restartBtn = document.querySelector('#restart-btn')
     const customizeSection = document.querySelector('#customize-sidebar-section')
-    const bgColorPicker = document.querySelector('#bg-color-picker')
-    const toggleText = document.querySelector('#toggle-text')
     const toggleDate = document.querySelector('#toggle-date')
+    const toggleLocation = document.querySelector('#toggle-location')
+    const toggleCaption = document.querySelector('#toggle-caption')
+    const locationInputWrapper = document.querySelector('#location-input-wrapper')
+    const locationInput = document.querySelector('#location-input')
+    const locationDetectBtn = document.querySelector('#location-detect-btn')
+    const captionInputWrapper = document.querySelector('#caption-input-wrapper')
+    const captionInput = document.querySelector('#caption-input')
+    const captionStyleBtns = document.querySelectorAll('.caption-style-btn')
+    
+    const colorSwatch = document.querySelector('#color-swatch')
+    const colorPickerDropdown = document.querySelector('#color-picker-dropdown')
+    const gradientCanvas = document.querySelector('#color-gradient-canvas')
+    const gradientCursor = document.querySelector('#gradient-cursor')
+    const hueSlider = document.querySelector('#hue-slider')
+    const hexInput = document.querySelector('#hex-input')
+    const presetColors = document.querySelectorAll('.preset-color')
 
     finalCanvas.width = layout.width
     finalCanvas.height = layout.height
@@ -96,6 +117,12 @@ export async function initEditor() {
         const file = e.target.files[0]
         if (!file || photos.length >= layout.photoCount) return
 
+        captureMode = 'upload'
+        
+        if (photos.length === 0) {
+            tryExtractExifLocation(file)
+        }
+
         const reader = new FileReader()
         reader.onload = async evt => {
             photos.push(evt.target.result)
@@ -131,10 +158,106 @@ export async function initEditor() {
         renderFramesSidebar()
         renderStickersSidebar()
         customizeSection.style.display = 'block'
-        bgColorPicker.value = currentOptions.bgColor
+        
         toggleDate.checked = currentOptions.showDate
+        toggleLocation.checked = currentOptions.showLocation
+        toggleCaption.checked = currentOptions.showCaption
+        locationInput.value = currentOptions.locationText
+        captionInput.value = currentOptions.captionText
+        
+        updateInputVisibility()
+        
+        initColorPicker()
+        initOverlayControls()
         updateCustomizationState()
         updateFinalCanvas()
+    }
+
+    function updateInputVisibility() {
+        locationInputWrapper.style.display = currentOptions.showLocation ? 'flex' : 'none'
+        captionInputWrapper.style.display = currentOptions.showCaption ? 'flex' : 'none'
+    }
+
+    function initOverlayControls() {
+        toggleDate.onchange = e => {
+            currentOptions.showDate = e.target.checked
+            updateFinalCanvas()
+        }
+
+        toggleLocation.onchange = async e => {
+            currentOptions.showLocation = e.target.checked
+            updateInputVisibility()
+            
+            if (e.target.checked && !currentOptions.locationText && captureMode === 'camera') {
+                await detectLocation()
+            }
+            
+            updateFinalCanvas()
+        }
+
+        locationInput.oninput = e => {
+            currentOptions.locationText = e.target.value
+            updateFinalCanvas()
+        }
+
+        locationDetectBtn.onclick = async () => {
+            await detectLocation()
+        }
+
+        toggleCaption.onchange = e => {
+            currentOptions.showCaption = e.target.checked
+            updateInputVisibility()
+            updateFinalCanvas()
+        }
+
+        captionInput.oninput = e => {
+            currentOptions.captionText = e.target.value
+            updateFinalCanvas()
+        }
+
+        captionStyleBtns.forEach(btn => {
+            btn.onclick = () => {
+                captionStyleBtns.forEach(b => b.classList.remove('active'))
+                btn.classList.add('active')
+                currentOptions.captionStyle = btn.dataset.style
+                updateFinalCanvas()
+            }
+        })
+    }
+
+    async function detectLocation() {
+        locationDetectBtn.classList.add('detecting')
+        
+        try {
+            const coords = await requestGeolocation()
+            if (coords) {
+                const locationStr = await getLocationString(coords.lat, coords.lng)
+                if (locationStr) {
+                    currentOptions.locationText = locationStr
+                    locationInput.value = locationStr
+                    updateFinalCanvas()
+                }
+            }
+        } catch (error) {
+            console.warn('Location detection failed:', error)
+        } finally {
+            locationDetectBtn.classList.remove('detecting')
+        }
+    }
+
+    async function tryExtractExifLocation(file) {
+        try {
+            const coords = await extractExifLocation(file)
+            if (coords) {
+                const locationStr = await getLocationString(coords.lat, coords.lng)
+                if (locationStr) {
+                    currentOptions.locationText = locationStr
+                    locationInput.value = locationStr
+                }
+            }
+        } catch (error) {
+            console.warn('EXIF location extraction failed:', error)
+        }
     }
 
     function updateCustomizationState() {
@@ -142,24 +265,16 @@ export async function initEditor() {
             customizeSection.style.display = 'none'
             currentOptions.showBranding = false
             currentOptions.showDate = false
+            currentOptions.showLocation = false
+            currentOptions.showCaption = false
         } else {
             customizeSection.style.display = 'block'
-            const brandingLabel = toggleText.closest('.toggle-customize')
-
-            if (!layout.text) {
-                brandingLabel.style.display = 'none'
-                currentOptions.showBranding = false
-            } else if (layout.lockBranding) {
-                brandingLabel.style.display = 'none'
-                currentOptions.showBranding = true
-            } else {
-                brandingLabel.style.display = 'flex'
-                toggleText.checked = currentOptions.showBranding
-            }
+            currentOptions.showBranding = !!layout.text
         }
-
-        toggleText.checked = currentOptions.showBranding
         toggleDate.checked = currentOptions.showDate
+        toggleLocation.checked = currentOptions.showLocation
+        toggleCaption.checked = currentOptions.showCaption
+        updateInputVisibility()
     }
 
     async function renderLivePreview() {
@@ -179,7 +294,17 @@ export async function initEditor() {
     }
 
     async function updateFinalCanvas() {
-        const dataUrl = await renderLayout(layout, photos, stickerManager, currentOptions)
+        const renderOptions = {
+            showText: currentOptions.showBranding,
+            showDate: currentOptions.showDate,
+            showLocation: currentOptions.showLocation,
+            showCaption: currentOptions.showCaption,
+            locationText: currentOptions.locationText,
+            captionText: currentOptions.captionText,
+            captionStyle: currentOptions.captionStyle,
+            bgColor: currentOptions.bgColor
+        }
+        const dataUrl = await renderLayout(layout, photos, stickerManager, renderOptions)
 
         const ctx = finalCanvas.getContext('2d')
         const img = new Image()
@@ -224,23 +349,193 @@ export async function initEditor() {
         })
     }
 
-    bgColorPicker.oninput = e => {
-        currentOptions.bgColor = e.target.value
+    let currentHue = 0
+    let currentSat = 0
+    let currentBright = 100
+
+    function initColorPicker() {
+        updateSwatchColor(currentOptions.bgColor)
+        drawGradient()
+        
+        colorSwatch.addEventListener('click', (e) => {
+            e.stopPropagation()
+            colorPickerDropdown.classList.toggle('open')
+        })
+
+        document.addEventListener('click', (e) => {
+            if (!colorPickerDropdown.contains(e.target) && e.target !== colorSwatch) {
+                colorPickerDropdown.classList.remove('open')
+            }
+        })
+
+        presetColors.forEach(preset => {
+            preset.addEventListener('click', () => {
+                const color = preset.dataset.color
+                setColor(color)
+            })
+        })
+
+        let isDraggingGradient = false
+        
+        gradientCanvas.addEventListener('mousedown', (e) => {
+            isDraggingGradient = true
+            handleGradientSelect(e)
+        })
+
+        document.addEventListener('mousemove', (e) => {
+            if (isDraggingGradient) handleGradientSelect(e)
+        })
+
+        document.addEventListener('mouseup', () => {
+            isDraggingGradient = false
+        })
+
+        hueSlider.addEventListener('input', () => {
+            currentHue = parseInt(hueSlider.value)
+            drawGradient()
+            updateColorFromHSV()
+        })
+
+        hexInput.addEventListener('input', (e) => {
+            let value = e.target.value
+            if (!value.startsWith('#')) value = '#' + value
+            if (/^#[0-9A-Fa-f]{6}$/.test(value)) {
+                setColor(value, false)
+            }
+        })
+
+        hexInput.addEventListener('blur', () => {
+            hexInput.value = currentOptions.bgColor
+        })
+    }
+
+    function handleGradientSelect(e) {
+        const rect = gradientCanvas.getBoundingClientRect()
+        let x = Math.max(0, Math.min(e.clientX - rect.left, rect.width))
+        let y = Math.max(0, Math.min(e.clientY - rect.top, rect.height))
+        
+        currentSat = (x / rect.width) * 100
+        currentBright = 100 - (y / rect.height) * 100
+        
+        gradientCursor.style.left = x + 'px'
+        gradientCursor.style.top = y + 'px'
+        
+        updateColorFromHSV()
+    }
+
+    function drawGradient() {
+        const ctx = gradientCanvas.getContext('2d')
+        const width = gradientCanvas.width
+        const height = gradientCanvas.height
+
+        const hueColor = `hsl(${currentHue}, 100%, 50%)`
+        
+        const gradientH = ctx.createLinearGradient(0, 0, width, 0)
+        gradientH.addColorStop(0, '#ffffff')
+        gradientH.addColorStop(1, hueColor)
+        ctx.fillStyle = gradientH
+        ctx.fillRect(0, 0, width, height)
+
+        const gradientV = ctx.createLinearGradient(0, 0, 0, height)
+        gradientV.addColorStop(0, 'rgba(0,0,0,0)')
+        gradientV.addColorStop(1, 'rgba(0,0,0,1)')
+        ctx.fillStyle = gradientV
+        ctx.fillRect(0, 0, width, height)
+    }
+
+    function updateColorFromHSV() {
+        const color = hsvToHex(currentHue, currentSat, currentBright)
+        currentOptions.bgColor = color
+        updateSwatchColor(color)
+        hexInput.value = color
         updateFinalCanvas()
     }
 
-    toggleText.onchange = e => {
-        currentOptions.showBranding = e.target.checked
+    function setColor(hex, updateCursor = true) {
+        currentOptions.bgColor = hex
+        updateSwatchColor(hex)
+        hexInput.value = hex
+
+        if (updateCursor) {
+            const hsv = hexToHSV(hex)
+            currentHue = hsv.h
+            currentSat = hsv.s
+            currentBright = hsv.v
+            hueSlider.value = currentHue
+            drawGradient()
+            
+            const x = (currentSat / 100) * gradientCanvas.width
+            const y = ((100 - currentBright) / 100) * gradientCanvas.height
+            gradientCursor.style.left = x + 'px'
+            gradientCursor.style.top = y + 'px'
+        }
+
         updateFinalCanvas()
     }
 
-    toggleDate.onchange = e => {
-        currentOptions.showDate = e.target.checked
-        updateFinalCanvas()
+    function updateSwatchColor(color) {
+        const swatchInner = colorSwatch.querySelector('.swatch-inner')
+        swatchInner.style.background = color
+    }
+
+    function hsvToHex(h, s, v) {
+        s /= 100
+        v /= 100
+        const c = v * s
+        const x = c * (1 - Math.abs((h / 60) % 2 - 1))
+        const m = v - c
+        let r, g, b
+        
+        if (h < 60) { r = c; g = x; b = 0 }
+        else if (h < 120) { r = x; g = c; b = 0 }
+        else if (h < 180) { r = 0; g = c; b = x }
+        else if (h < 240) { r = 0; g = x; b = c }
+        else if (h < 300) { r = x; g = 0; b = c }
+        else { r = c; g = 0; b = x }
+        
+        r = Math.round((r + m) * 255)
+        g = Math.round((g + m) * 255)
+        b = Math.round((b + m) * 255)
+        
+        return '#' + [r, g, b].map(x => x.toString(16).padStart(2, '0')).join('')
+    }
+
+    function hexToHSV(hex) {
+        const r = parseInt(hex.slice(1, 3), 16) / 255
+        const g = parseInt(hex.slice(3, 5), 16) / 255
+        const b = parseInt(hex.slice(5, 7), 16) / 255
+        
+        const max = Math.max(r, g, b)
+        const min = Math.min(r, g, b)
+        const d = max - min
+        
+        let h = 0
+        if (d !== 0) {
+            if (max === r) h = ((g - b) / d) % 6
+            else if (max === g) h = (b - r) / d + 2
+            else h = (r - g) / d + 4
+            h = Math.round(h * 60)
+            if (h < 0) h += 360
+        }
+        
+        const s = max === 0 ? 0 : (d / max) * 100
+        const v = max * 100
+        
+        return { h, s, v }
     }
 
     downloadBtn.onclick = async () => {
-        const url = await renderLayout(layout, photos, stickerManager, currentOptions)
+        const renderOptions = {
+            showText: currentOptions.showBranding,
+            showDate: currentOptions.showDate,
+            showLocation: currentOptions.showLocation,
+            showCaption: currentOptions.showCaption,
+            locationText: currentOptions.locationText,
+            captionText: currentOptions.captionText,
+            captionStyle: currentOptions.captionStyle,
+            bgColor: currentOptions.bgColor
+        }
+        const url = await renderLayout(layout, photos, stickerManager, renderOptions)
         const a = document.createElement('a')
         a.download = `StarlightStudio-${Date.now()}.png`
         a.href = url

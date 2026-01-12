@@ -1,11 +1,5 @@
 export const STICKERS = [
     {
-        id: 'sticker-ribbon',
-        name: 'Ribbon',
-        src: './assets/stickers/ribbon.png',
-        defaultSize: 150
-    },
-    {
         id: 'sticker-bubbleBekberner',
         name: 'Bekberner',
         src: './assets/stickers/bekberner.png',
@@ -22,5 +16,11 @@ export const STICKERS = [
         name: 'Too Cute For You',
         src: './assets/stickers/tooCuteForYou.png',
         defaultSize: 150
-    }
+    },
+    {
+        id: 'sticker-ribbon',
+        name: 'Ribbon',
+        src: './assets/stickers/ribbon.png',
+        defaultSize: 150
+    },
 ]
