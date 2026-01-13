@@ -9,12 +9,11 @@ The project is designed to feel like a real photobooth experience, with automati
 - Live camera capture using the browser camera
 - Multiple layout options with preview thumbnails
 - Automatic multi-photo capture based on selected layout
-- Configurable countdown timer (3s, 5s, 10s)
-- Flash overlay and shutter sound toggle for realistic capture feedback
+- Countdown timer 3s
+- Flash overlay for realistic capture feedback
 - Photostrip templates with custom frame support
-- Sticker system with drag, scale, and rotate interactions
+- Sticker system
 - Background color customization
-- Date and branding text options
 - Export final image as a downloadable PNG
 
 ## Tech Stack
