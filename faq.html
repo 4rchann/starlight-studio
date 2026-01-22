@@ -27,7 +27,8 @@
             <div class="faq-categories">
                 <button class="faq-category-btn active" data-category="all">All</button>
                 <button class="faq-category-btn" data-category="general">General</button>
-                <button class="faq-category-btn" data-category="usage">How It Works</button>
+                <button class="faq-category-btn" data-category="features">Features & Usage</button>
+                <button class="faq-category-btn" data-category="privacy">Privacy & Security</button>
                 <button class="faq-category-btn" data-category="technical">Formats & Downloads</button>
             </div>
             <div class="faq-list">
@@ -37,37 +38,90 @@
                         <span class="faq-icon">+</span>
                     </button>
                     <div class="faq-answer">
-                        <p>Starlight Studio is a digital photobooth platform that allows you to create beautiful, customized photo layouts. Perfect for daily snaps, social sharing, or just capturing moments in magical way.</p>
+                        <p>Starlight Studio is a free, browser-based photobooth that lets you capture photos using your camera or upload existing images. Create beautiful photostrips and postcards with customizable layouts, stickers, captions, and backgrounds. All processed entirely on your device.</p>
                     </div>
                 </div>
-
                 <div class="faq-item" data-category="general">
                     <button class="faq-question">
                         <span>Is Starlight Studio free to use?</span>
                         <span class="faq-icon">+</span>
                     </button>
                     <div class="faq-answer">
-                        <p>Yes! Starlight Studio is completely free to use. Beautiful photo memories should be accessible to everyone, always.</p>
+                        <p>Yes! Starlight Studio is completely free. All features are available to everyone.</p>
                     </div>
                 </div>
-
-                <div class="faq-item" data-category="usage">
+                <div class="faq-item" data-category="general">
                     <button class="faq-question">
-                        <span>How do I choose a layout?</span>
+                        <span>What devices and browsers are supported?</span>
                         <span class="faq-icon">+</span>
                     </button>
                     <div class="faq-answer">
-                        <p>Simply navigate to the "Choose a Layout" page from the menu. Browse through our collection of beatiful templates, preview them, and select the one that best fits your style and occasion.</p>
+                        <p>Starlight Studio works on any modern browser (Chrome, Firefox, Safari, Edge) on desktop, tablet, or mobile devices. For camera capture, your device must have a working camera and grant permission to use it.</p>
                     </div>
                 </div>
 
-                <div class="faq-item" data-category="usage">
+                <div class="faq-item" data-category="features">
                     <button class="faq-question">
-                        <span>Can I customize the layouts?</span>
+                        <span>How do I take photos?</span>
                         <span class="faq-icon">+</span>
                     </button>
                     <div class="faq-answer">
-                        <p>Yes! Each layout can be personalized with your photos. Some layouts also allow you to adjust colors, add text, and apply filters making your photos feel special.</p>
+                        <p>You can either use your device's camera with a countdown timer (3 seconds), or upload existing photos from your device. The camera option require granting camera permission.</p>
+                    </div>
+                </div>
+                <div class="faq-item" data-category="features">
+                    <div class="faq-question">
+                        <span>What layouts are available?</span>
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>We offer 6 layout options, each layout is designed for different photo arrangements and occasions.</p>
+                    </div>
+                </div>
+                <div class="faq-item" data-category="features">
+                    <button class="faq-question">
+                        <span>How do I customize my photostrip?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>After capturing photos, you can customize with background colors (preset or custom color), stickers, (drag, resize, and rotate), captions with multiple styles, and optional date or location overlay. All customizations happen in real-time on the editor.</p>
+                    </div>
+                </div>
+                <div class="faq-item" data-category="features">
+                    <button class="faq-question">
+                        <span>How do stickers work?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Click any stickers to add it to your canvas. Once added, you can drag to reposition, use corner handles to resize, use the rotation handle to rotate, and click the delete button to remove. Stickers work with bot mouse and touch input.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item" data-category="privacy">
+                    <button class="faq-question">
+                        <span>Are my photos uploaded to a server?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>No. Your photos never leave your device. Starlight Studio is fully client-side, all photo capture, editing, and processing happens entirely in your browser. We have no server that receives or stores your images.</p>
+                    </div>
+                </div>
+                <div class="faq-item" data-category="privacy">
+                    <button class="faq-question">
+                        <span>What data does Starlight Studio collect?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>We collect no personal data. We don't use cookies, local storage for tracking, or any analytics. The only external request is an optional call to OpenStreetMap to convert your coordinates to a location name and this only happens if you enable the location feature.</p>
+                    </div>
+                </div>
+                <div class="faq-item" data-category="privacy">
+                    <button class="faq-question">
+                        <span>What permissions does the app need?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Camera permission is optional (only needed for live capture, you can upload photos instead). Geolocation permission is optional (only needed if you want to add location to your photostrip). Both can be denied without affecting core functionality.</p>
                     </div>
                 </div>
 
@@ -77,17 +131,16 @@
                         <span class="faq-icon">+</span>
                     </button>
                     <div class="faq-answer">
-                        <p>We support all common image formats including JPEG, PNG, and HEIC. For best results, we recommend using high-resolution images (at least 1080p).</p>
+                        <p>For uploads, we support JPEG, PNG, and HEIC formats. For best results, use high-resolution images. Your final photostrip is exported as a high-quality PNG file.</p>
                     </div>
                 </div>
-
                 <div class="faq-item" data-category="technical">
                     <button class="faq-question">
-                        <span>How do I save my photos?</span>
+                        <span>How do I download my finished photostrip?</span>
                         <span class="faq-icon">+</span>
                     </button>
                     <div class="faq-answer">
-                        <p>After creating your photo layout, you can download it directly to your device. We provide high-quality downloads suitable for printing or sharing on social media.</p>
+                        <p>Click the "Download" button in the editor to save your photostrip as a PNG image. The file is generated at high resolution suitable for printing or sharing on social media. The download happens instantly since everything is processed locally.</p>
                     </div>
                 </div>
             </div>
