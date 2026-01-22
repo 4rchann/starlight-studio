@@ -51,6 +51,8 @@
 }
 
 .faq-item {
+    width: 55%;
+    margin: 0 auto;
     background: var(--color-background-alt);
     border-radius: var(--radius-lg);
     overflow: hidden;
