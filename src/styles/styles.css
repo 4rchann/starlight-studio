@@ -6,6 +6,10 @@
 @import url('./components/buttons.css');
 @import url('./pages/home.css');
 
+body {
+    height: 100vh;
+}
+
 .container {
     width: 100%;
     max-width: var(--container-max-width);
